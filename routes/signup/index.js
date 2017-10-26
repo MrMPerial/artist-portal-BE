@@ -1,8 +1,8 @@
 const router = require('express').Router();
-const addUser = require('./addUser');
+const addArtist = require('./addArtist');
 
-  router.get('/', (req, res) => {
-    res.status(200).send('Connected');
-  });
+router.get('/addArtist', (req, res) => {
+  console.log('Connected');
+});
 
-  module.exports = router;
+module.exports = router;
