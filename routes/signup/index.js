@@ -10,6 +10,8 @@ const addFan = require('./addFan');
 
 // Add Artist
 router.post('/addArtist', (req, res) => {
+  // Test Connection
+  addArtist.addArtist(req);
   res.status(200).send(addArtist);
 });
 
