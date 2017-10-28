@@ -1,9 +1,6 @@
 const router = require('express').Router();
 
-const mongodb = require('../mongodb.utils');
-
-mongodb.createEventListeners();
-mongodb.connect();
+const mongodb = require('../../mongodb.utils');
 
 // Signup Requirements
 const addArtist = require('./addArtist');

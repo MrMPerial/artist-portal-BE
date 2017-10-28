@@ -1,7 +1,6 @@
-const mongodb = require('../mongodb.utils');
+const router = require('express').Router();
 
-mongodb.createEventListeners();
-mongodb.connect();
+const mongodb = require('../../mongodb.utils');
 
 // Profile Requirements
 const createArtistProfile = require('./createArtistProfile');
@@ -30,3 +29,5 @@ router.put('/updateArtistProfile', (req, res) => {
 router.put('/updateFanProfile', (req, res) => {
   res.status(200);
 });
+
+module.exports = router;

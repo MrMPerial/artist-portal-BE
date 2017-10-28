@@ -1,7 +1,6 @@
-const mongodb = require('../mongodb.utils');
+const router = require('express').Router();
 
-mongodb.createEventListeners();
-mongodb.connect();
+const mongodb = require('../../mongodb.utils');
 
 // Song Requirements
 const submitSong = require('./submitSong');
@@ -36,3 +35,5 @@ router.put('/updateSong', (req, res) => {
 router.delete('/deleteSong', (req, res) => {
   res.status(200);
 });
+
+module.exports = router;

@@ -9,7 +9,7 @@ module.exports = {
 };
 
 function connect() {
-  const uri = 'mongodb://mrmperial:1ogocm3eat@ds229435.mlab.com:29435/artist-portal';
+  const uri = 'mongodb://mrmperial:artistportalproject@ds229435.mlab.com:29435/artist-portal';
   mongoose.connect(uri, { useMongoClient: true });
 }
 
@@ -27,6 +27,6 @@ function createEventListeners() {
   });
 
   mongoose.connection.on('error', () => {
-    console.log(`There was an issue connecting with the database: ${err}`);
+    console.log(`There was an issue connecting with the database.`);
   });
 }

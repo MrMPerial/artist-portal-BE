@@ -2,6 +2,11 @@ const express = require('express');
 const routes = require('./routes');
 const bodyParser = require('body-parser');
 
+const mongodb = require('./mongodb.utils');
+
+mongodb.createEventListeners();
+mongodb.connect();
+
 const app = express();
 
 app.use(bodyParser.json());
