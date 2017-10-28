@@ -1,11 +1,9 @@
 const router = require('express').Router();
 
-const mongodb = require('../mongodb.utils');
 const signup = require('./signup');
 const users = require('./users');
-
-mongodb.createEventListeners();
-mongodb.connect();
+const profiles = require('./profiles');
+const songs = require('./songs');
 
 router.get('/', (req, res) => {
   res.status(200).send('Looks like we\'re up and running!');
@@ -13,5 +11,7 @@ router.get('/', (req, res) => {
 
 router.use('/signup', signup);
 router.use('/users', users);
+router.use('/profiles', profiles);
+router.use('/songs', songs);
 
 module.exports = router;
