@@ -1,22 +1,19 @@
 const router = require('express').Router();
 
-// Signup
+// Signup Requirements
 const addArtist = require('./addArtist');
 const addFan = require('./addFan');
 
-// Signup
+// Signup Endpoints
+
+// Add Artist
 router.post('/addArtist', (req, res) => {
-  res.status(200);
+  res.status(200).send(addArtist);
 });
 
+// Add Fan
 router.post('/addFan', (req, res) => {
   res.status(200);
-});
-
-// Login
-router.get('/login', (req, res) => {
-  console.log('login');
-  res.status(200).send(login);
 });
 
 // Song Submission
