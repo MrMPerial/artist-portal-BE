@@ -1,9 +1,11 @@
-const Profile = {
-  bannerImage: bannerImage,
-  profileImage: profileImage,
-  artistName: artistName,
-  profileType: profileType,
-  userName: username
-}
+const mongoose = require('mongoose');
 
-module.exports = Profile;
+const profileSchema = mongoose.Schema({
+  bannerImage: String,
+  profileImage: String,
+  artistName: String,
+  profileType: String,
+  userName: String
+});
+
+module.exports = mongoose.model('Profile', profileSchema);

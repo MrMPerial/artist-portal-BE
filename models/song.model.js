@@ -1,11 +1,13 @@
-const Song = {
-  image: image,
-  mp3: mp3,
-  title: title,
-  downloadable: downloadable,
-  streamable: streamable,
-  numberOfLikes: numberOfLikes,
-  usersThatLiked: usersThatLiked
-}
+const mongoose = require('mongoose');
 
-module.exports = Song;
+const songSchema = mongoose.Schema({
+  image: String,
+  mp3: String,
+  title: String,
+  downloadable: Boolean,
+  streamable: Boolean,
+  numberOfLikes: Number,
+  usersThatLiked: String[]
+});
+
+module.exports = mongoose.model('Song', songSchema);
