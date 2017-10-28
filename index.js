@@ -1,10 +1,10 @@
 const express = require('express');
 const routes = require('./routes');
-const bodyParer = require('body-parser');
+const bodyParser = require('body-parser');
 
 const app = express();
 
-app.use(bodyParer.json());
+app.use(bodyParser.json());
 app.use('/', routes);
 
 app.listen(5000, () => {

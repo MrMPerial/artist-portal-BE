@@ -3,5 +3,5 @@ module.exports = {
 }
 
 function addArtist() {
-  console.log('So far so good!');
+  console.log('Add Artist Function');
 }
