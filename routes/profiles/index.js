@@ -12,12 +12,14 @@ const updateFanProfile = require('./updateFanProfile');
 
 // Create Artist Profile
 router.post('/createArtistProfile', (req, res) => {
-  res.status(200);
+  createArtistProfile.createArtistProfile(req);
+  res.status(200).send('Artist profile successfully created!');
 });
 
 // Create Fan Profile
 router.post('/createFanProfile', (req, res) => {
-  res.status(200);
+  createFanProfile.createFanProfile(req);
+  res.status(200).send('Fan profile successfully created!');
 });
 
 // Update Artist Profile
