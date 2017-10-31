@@ -17,7 +17,8 @@ router.post('/addArtist', (req, res) => {
 
 // Add Fan
 router.post('/addFan', (req, res) => {
-  res.status(200);
+  addFan.addFan(req);
+  res.status(200).send(addFan);
 });
 
 module.exports = router;
