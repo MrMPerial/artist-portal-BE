@@ -1,14 +1,19 @@
+let Song = require('../../models/song.model');
+
 module.exports = {
   submitSong
 }
 
-function submitSong() {
-  console.log('Submit Song Function');
-  // Cover Image
-  // Song as MP3
-  // Song Title
-  // Downloadable
-  // Streamable
-  // Number of Likes
-  // Users that have liked
+function submitSong(req) {
+  let newSong = new Song({
+    image: req.body.image, // convert file to string and post file to objDB
+    mp3: req.body.mp3, // convert file to string and post file to objDB
+    title: req.body.title,
+    downloadable: true,
+    streamable: true,
+    numberOfLikes: 0,
+    usersThatLiked: []
+  });
+
+  newSong.save();
 }

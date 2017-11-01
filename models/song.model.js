@@ -7,7 +7,7 @@ const songSchema = mongoose.Schema({
   downloadable: Boolean,
   streamable: Boolean,
   numberOfLikes: Number,
-  usersThatLiked: String[]
+  usersThatLiked: [String]
 });
 
 module.exports = mongoose.model('Song', songSchema);

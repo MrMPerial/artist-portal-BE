@@ -13,7 +13,8 @@ const deleteSong = require('./deleteSong');
 
 // Song Submission
 router.post('/submitSong', (req, res) => {
-  res.status(200);
+  submitSong.submitSong(req);
+  res.status(200).send('Song submitted successfully!');
 });
 
 // Show All Songs
