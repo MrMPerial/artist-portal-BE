@@ -19,7 +19,8 @@ router.post('/submitSong', (req, res) => {
 
 // Show All Songs
 router.get('/showAllSongs', (req, res) => {
-  res.status(200);
+  showAllSongs.showAllSongs();
+  res.status(200).json(showAllSongs);
 });
 
 // Search Song

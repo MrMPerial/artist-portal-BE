@@ -1,7 +1,9 @@
+let Song = require('../../models/song.model');
+
 module.exports = {
   showAllSongs
 }
 
 function showAllSongs() {
-  console.log('Show All Songs Function');
+  return Song.find({});
 }
