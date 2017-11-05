@@ -5,5 +5,5 @@ module.exports = {
 }
 
 function showAllSongs() {
-  return Song.find({});
+  return Song.find({}).populate('songs').exec();
 }
