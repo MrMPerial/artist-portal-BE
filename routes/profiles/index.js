@@ -24,12 +24,24 @@ router.post('/createFanProfile', (req, res) => {
 
 // Update Artist Profile
 router.put('/updateArtistProfile', (req, res) => {
-  res.status(200);
+  updateArtistProfile.updateArtistProfile(req.body)
+  .then((updatedArtistProfile) => {
+    res.status(200).send('Artist Profile Updated.');
+  })
+  .catch((err) => {
+    res.status(500).send(err);
+  });
 });
 
 // Update Fan Profile
 router.put('/updateFanProfile', (req, res) => {
-  res.status(200);
+  updateFanProfile.updateFanProfile(req.body)
+  .then((updatedFanProfile) => {
+    res.status(200).send('Fan Profile Updated.');
+  })
+  .catch((err) => {
+    res.status(500).send(err);
+  });
 });
 
 module.exports = router;
