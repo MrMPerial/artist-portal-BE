@@ -6,6 +6,8 @@ const mongodb = require('../../mongodb.utils');
 const addArtist = require('./addArtist');
 const addFan = require('./addFan');
 
+// TODO: Add oAuth
+
 // Signup Endpoints //
 
 // Add Artist
