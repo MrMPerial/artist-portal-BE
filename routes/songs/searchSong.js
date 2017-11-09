@@ -1,7 +1,9 @@
+let Song = require('../../models/song.model');
+
 module.exports = {
-  SearchSong
+  searchSong
 }
 
-function SearchSong() {
-  console.log('Search Song Function');
+function searchSong(req) {
+  return Song.find({ title: req }).populate('songs').exec();
 }
