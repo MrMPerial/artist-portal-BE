@@ -41,7 +41,13 @@ router.get('/searchSong', (req, res) => {
 
 // Update Song
 router.put('/updateSong', (req, res) => {
-  res.status(200);
+  updateSong.updateSong(req.body)
+  .then((songToUpdate) => {
+    res.status(200).send('Your song has been updated.');
+  })
+  .catch((err) => {
+    res.status(500).send(err);
+  });
 });
 
 // Delete Song
