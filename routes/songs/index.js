@@ -46,7 +46,7 @@ router.put('/updateSong', (req, res) => {
 
 // Delete Song
 router.delete('/deleteSong', (req, res) => {
-  deleteSong.deleteSong(req.query.title)
+  deleteSong.deleteSong(req.query.id)
   .then((songToDelete) => {
     res.status(200).send('Your song has been deleted.');
   })
