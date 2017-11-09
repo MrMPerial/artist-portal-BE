@@ -16,7 +16,13 @@ router.get('/login', (req, res) => {
 
 // Delete User
 router.delete('/deleteUser', (req, res) => {
-  res.status(200);
+  deleteUser.deleteUser(req.query.id)
+  .then((userToDelete) => {
+    res.status(200).send('User has been deleted.')
+  })
+  .catch((err) => {
+    res.status(500).send(err);
+  });
 });
 
 module.exports = router;
