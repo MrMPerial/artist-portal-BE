@@ -1,18 +1,18 @@
 let User = require('../../models/user.model');
 
 module.exports = {
-  addArtist
+  addUser
 }
 
-function addArtist(req) {
-  let newArtist = new User({
+function addUser(req, type) {
+  let newFan = new User({
     email: req.body.email,
     firstname: req.body.firstname,
     lastname: req.body.lastname,
     username: req.body.username,
     password: req.body.password,
-    profileType: 'artist'
+    profileType: type
   });
 
-  newArtist.save();
+  newFan.save();
 }

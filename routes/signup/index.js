@@ -3,8 +3,7 @@ const router = require('express').Router();
 const mongodb = require('../../mongodb.utils');
 
 // Signup Requirements
-const addArtist = require('./addArtist');
-const addFan = require('./addFan');
+const addUser = require('./addUser');
 
 // TODO: Add oAuth
 
@@ -12,13 +11,13 @@ const addFan = require('./addFan');
 
 // Add Artist
 router.post('/addArtist', (req, res) => {
-  addArtist.addArtist(req);
+  addUser.addUser(req, 'Artist');
   res.status(200).send('Successfully added new artist!');
 });
 
 // Add Fan
 router.post('/addFan', (req, res) => {
-  addFan.addFan(req);
+  addUser.addUser(req, 'Fan');
   res.status(200).send('Successfully added new fan!');
 });
 
