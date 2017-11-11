@@ -15,5 +15,3 @@ function updateProfile(profileToUpdate) {
     return profileFound.save();
   });
 }
-
-module.exports = router;

@@ -1,4 +1,4 @@
-let Profile = require('../../model.profile.model');
+let Profile = require('../../models/profile.model');
 
 module.exports = {
   createProfile
@@ -13,5 +13,3 @@ function createProfile(req, type, username, artistName) {
     userName: username
   });
 }
-
-module.exports = router;
