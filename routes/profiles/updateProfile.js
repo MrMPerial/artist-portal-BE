@@ -1,10 +1,10 @@
 let Profile = require('../../models/profile.model');
 
 module.exports = {
-  updateArtistProfile
+  updateProfile
 }
 
-function updateArtistProfile(profileToUpdate) {
+function updateProfile(profileToUpdate) {
   return Profile.findById( profileToUpdate.id )
   .then((profileFound) => {
     profileFound.bannerImage = profileToUpdate.bannerImage;
@@ -15,3 +15,5 @@ function updateArtistProfile(profileToUpdate) {
     return profileFound.save();
   });
 }
+
+module.exports = router;
