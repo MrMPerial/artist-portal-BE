@@ -1,4 +1,5 @@
 let Song = require('../../models/song.model');
+let cloudinary = require('cloudinary');
 
 module.exports = {
   submitSong

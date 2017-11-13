@@ -1,4 +1,5 @@
 let Profile = require('../../models/profile.model');
+let cloudinary = require('cloudinary');
 
 module.exports = {
   createProfile
