@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
 // const UserSchema = mongoose.Schema({
 //   id: String
@@ -6,7 +7,7 @@ const mongoose = require('mongoose');
 //   profileType: String
 // });
 
-const userSchema = new Schema({
+const UserSchema = new Schema({
   github: {
     id: String,
     username: String,

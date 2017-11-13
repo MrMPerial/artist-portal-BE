@@ -14,7 +14,7 @@ mongodb.connect();
 configPassport(passport);
 const app = express();
 
-app.use(session({ secret: 'menagerie of monkeys', resave: false, saveUninitialized: false }));
+app.use(session({ secret: 'secret', resave: false, saveUninitialized: false }));
 app.use(bodyParser.json());
 
 app.use(passport.initialize());

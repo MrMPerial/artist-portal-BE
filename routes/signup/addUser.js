@@ -1,8 +1,8 @@
 let User = require('../../models/user.model');
 
-module.exports = {
-  addUser
-}
+// module.exports = {
+//   addUser
+// }
 
 ////
 

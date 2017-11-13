@@ -1,7 +1,7 @@
 const router = require('express').Router();
-const isLoggedIn = require('../middleware/is-logged-in.mw');
+const isLoggedIn = require('../../middleware/is-logged-in.mw');
 
-const mongodb = require('../../mongodb.utils');
+const mongodb = require('../../utils/mongodb.utils');
 
 // Signup Requirements
 const addUser = require('./addUser');
@@ -37,16 +37,16 @@ module.exports = function (passport) {
 
 // Signup Endpoints //
 
-// Add Artist
-router.post('/addArtist', (req, res) => {
-  addUser.addUser(req, 'Artist');
-  res.status(200).send('Successfully added new artist!');
-});
-
-// Add Fan
-router.post('/addFan', (req, res) => {
-  addUser.addUser(req, 'Fan');
-  res.status(200).send('Successfully added new fan!');
-});
+// // Add Artist
+// router.post('/addArtist', (req, res) => {
+//   addUser.addUser(req, 'Artist');
+//   res.status(200).send('Successfully added new artist!');
+// });
+//
+// // Add Fan
+// router.post('/addFan', (req, res) => {
+//   addUser.addUser(req, 'Fan');
+//   res.status(200).send('Successfully added new fan!');
+// });
 
 module.exports = router;

@@ -1,6 +1,6 @@
 const router = require('express').Router();
 
-const mongodb = require('../../mongodb.utils');
+const mongodb = require('../../utils/mongodb.utils');
 
 // Profile Requirements
 const createProfile = require('./createProfile');
