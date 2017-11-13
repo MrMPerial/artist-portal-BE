@@ -5,6 +5,10 @@ module.exports = {
   submitSong
 }
 
+// function upload song to cloudinary
+// retrieve link
+// add link to submit song function
+
 function submitSong(req) {
   let newSong = new Song({
     image: req.body.image, // convert file to string and post file to objDB
