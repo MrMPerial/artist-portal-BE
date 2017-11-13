@@ -3,33 +3,35 @@ const router = require('express').Router();
 const mongodb = require('../../mongodb.utils');
 
 // Profile Requirements
-const createArtistProfile = require('./createArtistProfile');
-const createFanProfile = require('./createFanProfile');
-const updateArtistProfile = require('./updateArtistProfile');
-const updateFanProfile = require('./updateFanProfile');
+const createProfile = require('./createProfile');
+const updateProfile = require('./updateProfile');
 
 // Profile Endpoints //
 
 // Create Artist Profile
 router.post('/createArtistProfile', (req, res) => {
-  createArtistProfile.createArtistProfile(req);
+  let username = req.body.userName;
+  let artistname = req.body.artistName;
+  createArtistProfile.createArtistProfile(req, 'Artist', username, artistname);
   res.status(200).send('Artist profile successfully created!');
 });
 
 // Create Fan Profile
 router.post('/createFanProfile', (req, res) => {
-  createFanProfile.createFanProfile(req);
+  let username = req.body.userName;
+  createFanProfile.createFanProfile(req, 'Fan', username, null);
   res.status(200).send('Fan profile successfully created!');
 });
 
-// Update Artist Profile
-router.put('/updateArtistProfile', (req, res) => {
-  res.status(200);
-});
-
-// Update Fan Profile
-router.put('/updateFanProfile', (req, res) => {
-  res.status(200);
+// Update Profile
+router.put('/updateProfile', (req, res) => {
+  updateArtistProfile.updateProfile(req.body)
+  .then((updatedProfile) => {
+    res.status(200).send('Profile Updated.');
+  })
+  .catch((err) => {
+    res.status(500).send(err);
+  });
 });
 
 module.exports = router;

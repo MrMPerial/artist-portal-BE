@@ -1,17 +1,15 @@
 let Profile = require('../../models/profile.model');
 
 module.exports = {
-  createArtistProfile
+  createProfile
 }
 
-function createArtistProfile(req) {
-  let newArtistProfile = new Profile({
+function createProfile(req, type, username, artistName) {
+  let newProfile = new Profile({
     bannerImage: req.body.bannerImage, // convert file to string and post file to objDB
     profileImage: req.body.profileImage, // convert file to string and post file to objDB
-    artistName: req.body.artistName,
-    profileType: 'artist',
-    userName: 'get from username'
+    artistName: artistName,
+    profileType: type,
+    userName: username
   });
-
-  newArtistProfile.save();
 }
