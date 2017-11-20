@@ -3,6 +3,8 @@ const bodyParser = require('body-parser');
 const passport = require('passport');
 const Strategy = require('passport-facebook').Strategy;
 const cloudinary = require('cloudinary');
+const formidable = require('formidable');
+const http = require('http');
 
 cloudinary.config({
   cloud_name: 'mperial-web-solutions',
@@ -64,12 +66,29 @@ app.get('/profile', require('connect-ensure-login').ensureLoggedIn(), (req, res)
 
 // Upload Routes -- Use Cloudinary
 app.post('/upload/song', (req, res) => {
-  res.status(200).send('Upload Song Selected!')
+  let song = req.body.song;
+  cloudinary.v2.uploader.upload(song,
+  {resource_type: "video",
+  public_id: "{{ username + song title }}"
+  },
+  (error, result) => {
+    if(error) {
+      console.log(error);
+    }
+    console.log(result);
+  });
 });
 
-app.post('/upload/image', (req, res) => {
-  let cover = req.body.coverArt;
-  cloudinary.v2.uploader.upload(cover,
+let Photo = {
+  title      : { type : String, length   : 255 },
+  image      : { type : JSON}
+};
+
+function uploadImage(req) {
+  let photo = new Photo(req.body);
+  let imageFile = req.files.image.path;
+
+  cloudinary.v2.uploader.upload(imageFile,
   {public_id: "Cover",
   transformation: [
     {
@@ -78,15 +97,19 @@ app.post('/upload/image', (req, res) => {
       crop: "scale"
     }
   ]
-  },
-  (error, result) => {
-    if(error) {
-      console.log(error);
-      res.status(500).send('Something went wrong while uploading image. Please Try again.')
-    }
-    console.log(result);
-    res.status(200).send('Image uploaded Successfully.')
+  })
+  .then( (image) => {
+    photo.image = image;
+    return photo.save();
+  })
+  .finally( () => {
+    res.render('photos/create_through_server', {photo: photo, upload: photo.image});
   });
+}
+
+app.post('/upload/image', (req, res) => {
+  uploadImage(req);
+  res.send('Image Uploaded!')
 });
 
 app.listen(3000, () => {
