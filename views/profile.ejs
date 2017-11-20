@@ -8,3 +8,13 @@
           <%= user.emails[0].value %><br/>
             <% } %>
 </p>
+
+<form action="/upload/image" method="post">
+  <input type="file" id="coverArt" name="coverArt">
+  <button type="submit">Upload Song Cover!</button>
+</form>
+
+<form action="/upload/song" method="post">
+  <input type="file" id="song" name="song">
+  <button type="submit">Upload New Song!</button>
+</form>
