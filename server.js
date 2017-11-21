@@ -3,8 +3,8 @@ const bodyParser = require('body-parser');
 const passport = require('passport');
 const Strategy = require('passport-facebook').Strategy;
 const cloudinary = require('cloudinary');
-const formidable = require('formidable');
-const http = require('http');
+const fileUpload = require('express-fileupload');
+const uuidv4 = require('uuid/v4');
 
 cloudinary.config({
   cloud_name: 'mperial-web-solutions',
@@ -34,6 +34,7 @@ app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 
 app.use(bodyParser.json());
+app.use(fileUpload());
 
 app.use(require('morgan')('combined'));
 app.use(require('cookie-parser')());
@@ -66,30 +67,28 @@ app.get('/profile', require('connect-ensure-login').ensureLoggedIn(), (req, res)
 
 // Upload Routes -- Use Cloudinary
 app.post('/upload/song', (req, res) => {
-  let song = req.body.song;
-  cloudinary.v2.uploader.upload(song,
-  {resource_type: "video",
-  public_id: "{{ username + song title }}"
-  },
-  (error, result) => {
+  let song = req.files.song;
+  let setID = uuidv4();
+
+  cloudinary.v2.uploader.upload_stream(
+    {resource_type: "video",
+    public_id: setID
+    }, (error, result) => {
     if(error) {
       console.log(error);
+      res.status(500).send('Something went wrong while uploading image. Please Try again.')
     }
     console.log(result);
-  });
+    res.status(200).send('Image uploaded Successfully.')
+  }).end(song.data);
 });
 
-let Photo = {
-  title      : { type : String, length   : 255 },
-  image      : { type : JSON}
-};
+app.post('/upload/image', (req, res) => {
+  let image = req.files.coverArt;
+  let setID = uuidv4();
 
-function uploadImage(req) {
-  let photo = new Photo(req.body);
-  let imageFile = req.files.image.path;
-
-  cloudinary.v2.uploader.upload(imageFile,
-  {public_id: "Cover",
+  cloudinary.v2.uploader.upload_stream(
+  {public_id: setID,
   transformation: [
     {
       width: 300,
@@ -97,19 +96,15 @@ function uploadImage(req) {
       crop: "scale"
     }
   ]
-  })
-  .then( (image) => {
-    photo.image = image;
-    return photo.save();
-  })
-  .finally( () => {
-    res.render('photos/create_through_server', {photo: photo, upload: photo.image});
-  });
-}
-
-app.post('/upload/image', (req, res) => {
-  uploadImage(req);
-  res.send('Image Uploaded!')
+}, (error, result) => {
+    if(error) {
+      console.log(error);
+      res.status(500).send('Something went wrong while uploading image. Please Try again.')
+    }
+    console.log(result);
+    res.status(200).send('Image uploaded Successfully.')
+  }).end(image.data);
+  console.log(setID);
 });
 
 app.listen(3000, () => {
