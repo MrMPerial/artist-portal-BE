@@ -1,3 +1,29 @@
+<style media="screen">
+
+  * {
+    box-sizing: border-box;
+  }
+
+  h2 {
+    text-align: center;
+  }
+
+  .newSongForm {
+    border: 1px solid gray;
+    border-radius: 10px;
+    box-shadow: 0 1px 4px darkgray;
+    margin: 0 auto;
+    padding: 20px;
+    width: 500px;
+  }
+
+  input {
+    margin-bottom: 10px;
+    width: 100%;
+  }
+
+</style>
+
 <p>
   ID:
   <%= user.id %><br/> Name:
@@ -8,12 +34,23 @@
           <% } %>
 </p>
 
-<form ref="coverArt" id="coverArt" action="/upload/image" method="post" enctype="multipart/form-data">
+<!-- <form ref="coverArt" id="coverArt" action="/upload/image" method="post" enctype="multipart/form-data">
   <input type="file" name="coverArt">
   <button type="submit">Upload Song Cover!</button>
-</form>
+</form> -->
 
-<form action="/upload/song" method="post">
-  <input type="file" id="song" name="song">
+<!-- <form ref="audio" id="audio" action="/upload/song" method="post" enctype="multipart/form-data">
+  <input type="file" id="audio" name="audio">
   <button type="submit">Upload New Song!</button>
+</form> -->
+
+<h2>Upload a new song!</h2>
+
+<form class="newSongForm" ref="newSong" action="/uploadNewSong" method="post" enctype="multipart/form-data">
+  <input type="text" name="title" value="" placeholder="What's the title of your song?">
+  <label for="coverArt">Cover Art</label>
+  <input type="file" id="coverArt" name="coverArt">
+  <label for="song">Song as MP3</label>
+  <input type="file" id="song" name="song">
+  <button type="submit" name="button">Add New Song!</button>
 </form>

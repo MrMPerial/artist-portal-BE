@@ -1,3 +1,5 @@
+'use strict';
+
 const express = require('express');
 const bodyParser = require('body-parser');
 const passport = require('passport');
@@ -66,47 +68,69 @@ app.get('/profile', require('connect-ensure-login').ensureLoggedIn(), (req, res)
 });
 
 // Upload Routes -- Use Cloudinary
-app.post('/upload/song', (req, res) => {
-  let song = req.files.song;
-  let setID = uuidv4();
-
-  cloudinary.v2.uploader.upload_stream(
-    {resource_type: "video",
-    public_id: setID
-    }, (error, result) => {
-    if(error) {
-      console.log(error);
-      res.status(500).send('Something went wrong while uploading image. Please Try again.')
-    }
-    console.log(result);
-    res.status(200).send('Image uploaded Successfully.')
-  }).end(song.data);
-});
-
-app.post('/upload/image', (req, res) => {
+app.post('/uploadNewSong', (req, res) => {
+  let title = req.body.title;
   let image = req.files.coverArt;
-  let setID = uuidv4();
+  let song = req.files.audio;
+  let cloudinaryImageID = uuidv4();
+  let cloudinarySongID = uuidv4();
 
-  cloudinary.v2.uploader.upload_stream(
-  {public_id: setID,
-  transformation: [
-    {
-      width: 300,
-      height: 300,
-      crop: "scale"
-    }
-  ]
-}, (error, result) => {
-    if(error) {
-      console.log(error);
-      res.status(500).send('Something went wrong while uploading image. Please Try again.')
-    }
-    console.log(result);
-    res.status(200).send('Image uploaded Successfully.')
-  }).end(image.data);
-  console.log(setID);
+  // Use promises to add song then image and finally database
+  uploadSong(song, cloudinarySongID);
+  uploadImage(image, cloudinaryImageID);
+  addToDB(title, cloudinaryImageID, cloudinarySongID);
+  res.status(200).send('Files uploaded!');
+
+  // Add to mlab database
+  function addToDB(title, cloudinaryImageID, cloudinarySongID) {
+    let songID = title;
+    let image = cloudinaryImageID;
+    let song = cloudinarySongID;
+  }
+
+  // Add to image cloudinary
+  function uploadImage(image, cloudinaryImageID) {
+    cloudinary.v2.uploader.upload_stream(
+    { public_id: cloudinaryImageID,
+    transformation: [
+      {
+        width: 300,
+        height: 300,
+        crop: 'scale'
+      }
+    ]
+  }, (error, result) => {
+      if(error) {
+        console.log(error);
+        res.status(500).send('Something went wrong while uploading image. Please Try again.')
+      }
+      console.log(result);
+      res.status(200).send('Image uploaded Successfully.')
+    }).end(image.data);
+  }
+
+  // Add to mp3 cloudinary
+  function uploadSong(song, cloudinarySongID) {
+    cloudinary.v2.uploader.upload_stream(
+      { resource_type: "video",
+      public_id: cloudinarySongID
+      }, (error, result) => {
+      if(error) {
+        console.log(error);
+        res.status(500).send('Something went wrong while uploading image. Please Try again.')
+      }
+      console.log(result);
+      res.status(200).send('Song uploaded Successfully.')
+    }).end(song.data);
+  }
+
+  // Return to profile when finished
+
 });
 
 app.listen(3000, () => {
   console.log('Artist Portal is now running on port 3000!');
 });
+
+// To access the image for display --->
+// cloudinary.image(cloudinaryImageID, { format: 'png' });
