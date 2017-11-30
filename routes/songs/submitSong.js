@@ -16,8 +16,7 @@ function submitSong(req) {
     title: req.body.title,
     downloadable: true,
     streamable: true,
-    numberOfLikes: 0,
-    usersThatLiked: []
+    numberOfLikes: 0
   });
 
   newSong.save();

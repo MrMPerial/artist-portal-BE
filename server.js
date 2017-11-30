@@ -1,5 +1,7 @@
 'use strict';
 
+// === Config === //
+
 const express = require('express');
 const bodyParser = require('body-parser');
 const passport = require('passport');
@@ -7,6 +9,13 @@ const Strategy = require('passport-facebook').Strategy;
 const cloudinary = require('cloudinary');
 const fileUpload = require('express-fileupload');
 const uuidv4 = require('uuid/v4');
+
+const mongodb = require('./utils/mongodb.utils');
+
+mongodb.createEventListeners();
+mongodb.connect();
+
+let Song = require('./models/song.model');
 
 cloudinary.config({
   cloud_name: 'mperial-web-solutions',
@@ -45,6 +54,8 @@ app.use(require('express-session')({ secret: 'ap secret', resave: true, saveUnin
 app.use(passport.initialize());
 app.use(passport.session());
 
+// === Endpoints === //
+
 // Login Routes
 app.get('/', (req, res) => {
   res.render('home', { user: req.user });
@@ -67,7 +78,7 @@ app.get('/profile', require('connect-ensure-login').ensureLoggedIn(), (req, res)
   res.render('profile', { user: req.user });
 });
 
-// Upload Routes -- Use Cloudinary
+// Upload Routes
 app.post('/uploadNewSong', (req, res) => {
   let title = req.body.title;
   let image = req.files.coverArt;
@@ -75,21 +86,51 @@ app.post('/uploadNewSong', (req, res) => {
   let cloudinaryImageID = uuidv4();
   let cloudinarySongID = uuidv4();
 
-  // Use promises to add song then image and finally database
-  uploadSong(song, cloudinarySongID);
-  uploadImage(image, cloudinaryImageID);
-  addToDB(title, cloudinaryImageID, cloudinarySongID);
-  res.status(200).send('Files uploaded!');
+  uploadSong(song, cloudinarySongID)
+  .then(() => {
+    return uploadImage(image, cloudinaryImageID);
+  })
+  .then(() => {
+    return addToDB(title, cloudinaryImageID, cloudinarySongID);
+  })
+  .then(() => {
+    res.status(200).render('/success', { message: 'Your song was successfully uploaded!' });
+    // res.status(200).send('Files uploaded!');
+    // Return to profile page
+  })
+  .catch((error) => {
+    res.status(500).send('Something went wrong. Please go back and try again.').end()
+  });
+});
 
-  // Add to mlab database
-  function addToDB(title, cloudinaryImageID, cloudinarySongID) {
-    let songID = title;
-    let image = cloudinaryImageID;
-    let song = cloudinarySongID;
-  }
+app.listen(3000, () => {
+  console.log('Artist Portal is now running on port 3000!');
+});
 
-  // Add to image cloudinary
-  function uploadImage(image, cloudinaryImageID) {
+// === Functions === //
+
+function addToDB(title, cloudinaryImageID, cloudinarySongID) {
+  let songID = title;
+  let image = cloudinaryImageID;
+  let song = cloudinarySongID;
+
+  let newSong = new Song({
+    // Get user ID from FB to use as artist ID
+    // artist: user.id,
+    imageID: image,
+    audioID: song,
+    title: songID,
+    downloadable: true,
+    streamable: true,
+    numberOfLikes: 0
+  });
+
+  return newSong.save();
+
+}
+
+function uploadImage(image, cloudinaryImageID) {
+  return new Promise((resolve, reject) => {
     cloudinary.v2.uploader.upload_stream(
     { public_id: cloudinaryImageID,
     transformation: [
@@ -102,35 +143,27 @@ app.post('/uploadNewSong', (req, res) => {
   }, (error, result) => {
       if(error) {
         console.log(error);
-        res.status(500).send('Something went wrong while uploading image. Please Try again.')
       }
-      console.log(result);
-      res.status(200).send('Image uploaded Successfully.')
     }).end(image.data);
-  }
+    resolve();
+  });
 
-  // Add to mp3 cloudinary
-  function uploadSong(song, cloudinarySongID) {
+}
+
+function uploadSong(song, cloudinarySongID) {
+  return new Promise((resolve, reject) => {
     cloudinary.v2.uploader.upload_stream(
       { resource_type: "video",
       public_id: cloudinarySongID
       }, (error, result) => {
       if(error) {
         console.log(error);
-        res.status(500).send('Something went wrong while uploading image. Please Try again.')
       }
-      console.log(result);
-      res.status(200).send('Song uploaded Successfully.')
     }).end(song.data);
-  }
+    resolve();
+  });
 
-  // Return to profile when finished
-
-});
-
-app.listen(3000, () => {
-  console.log('Artist Portal is now running on port 3000!');
-});
+}
 
 // To access the image for display --->
 // cloudinary.image(cloudinaryImageID, { format: 'png' });
