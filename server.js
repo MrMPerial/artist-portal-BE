@@ -28,6 +28,7 @@ passport.use(new Strategy({
   clientSecret: 'f8376e4fd45dacf715336a37a8acad89',
   callbackURL: 'http://localhost:3000/login/facebook/return'
 }, (accessToken, refreshToken, profile, cb) => {
+  // Get ID from here... ( profile.id )
   return cb(null, profile);
 }));
 
@@ -94,9 +95,8 @@ app.post('/uploadNewSong', (req, res) => {
     return addToDB(title, cloudinaryImageID, cloudinarySongID);
   })
   .then(() => {
-    res.status(200).render('/success', { message: 'Your song was successfully uploaded!' });
-    // res.status(200).send('Files uploaded!');
-    // Return to profile page
+    res.status(200).send('Your song was uploaded successfully!');
+    // TODO Return to profile page
   })
   .catch((error) => {
     res.status(500).send('Something went wrong. Please go back and try again.').end()
