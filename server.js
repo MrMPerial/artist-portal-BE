@@ -16,6 +16,7 @@ mongodb.createEventListeners();
 mongodb.connect();
 
 let Song = require('./models/song.model');
+let User = require('./models/user.model');
 
 cloudinary.config({
   cloud_name: 'mperial-web-solutions',
@@ -28,7 +29,6 @@ passport.use(new Strategy({
   clientSecret: 'f8376e4fd45dacf715336a37a8acad89',
   callbackURL: 'http://localhost:3000/login/facebook/return'
 }, (accessToken, refreshToken, profile, cb) => {
-  // Get ID from here... ( profile.id )
   return cb(null, profile);
 }));
 
@@ -76,11 +76,13 @@ app.get('/login/facebook/return',
 });
 
 app.get('/profile', require('connect-ensure-login').ensureLoggedIn(), (req, res) => {
+  addUser(req);
   res.render('profile', { user: req.user });
 });
 
 // Upload Routes
 app.post('/uploadNewSong', (req, res) => {
+  let user = req.user.id;
   let title = req.body.title;
   let image = req.files.coverArt;
   let song = req.files.audio;
@@ -92,7 +94,7 @@ app.post('/uploadNewSong', (req, res) => {
     return uploadImage(image, cloudinaryImageID);
   })
   .then(() => {
-    return addToDB(title, cloudinaryImageID, cloudinarySongID);
+    return addToDB(title, cloudinaryImageID, cloudinarySongID, user);
   })
   .then(() => {
     res.status(200).send('Your song was uploaded successfully!');
@@ -109,14 +111,34 @@ app.listen(3000, () => {
 
 // === Functions === //
 
-function addToDB(title, cloudinaryImageID, cloudinarySongID) {
+function addUser(req) {
+  console.log(req.user);
+  let id = req.user.id;
+  User.findOne({ 'userID': id })
+  .then((findUser) => {
+    if (!findUser) {
+      let newUser = new User({
+        userID: req.user.id,
+        userName: req.user.displayName,
+        songLikes: []
+      });
+
+      return newUser.save();
+    }
+  })
+  .catch((error) => {
+    console.log(error);
+  });
+}
+
+function addToDB(title, cloudinaryImageID, cloudinarySongID, user) {
+  let userID = user;
   let songID = title;
   let image = cloudinaryImageID;
   let song = cloudinarySongID;
 
   let newSong = new Song({
-    // Get user ID from FB to use as artist ID
-    // artist: user.id,
+    artist: userID,
     imageID: image,
     audioID: song,
     title: songID,
