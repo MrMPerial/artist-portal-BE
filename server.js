@@ -80,6 +80,16 @@ app.get('/profile', require('connect-ensure-login').ensureLoggedIn(), (req, res)
   res.render('profile', { user: req.user });
 });
 
+app.get('/discover', (req, res) => {
+  getAll()
+  .then((result) => {
+    res.status(200).json(result);
+  })
+  .catch((error) => {
+    console.log(error);
+  });
+});
+
 // Upload Routes
 app.post('/uploadNewSong', (req, res) => {
   let user = req.user.id;
@@ -97,8 +107,7 @@ app.post('/uploadNewSong', (req, res) => {
     return addToDB(title, cloudinaryImageID, cloudinarySongID, user);
   })
   .then(() => {
-    res.status(200).send('Your song was uploaded successfully!');
-    // TODO Return to profile page
+    res.status(200).render('success');
   })
   .catch((error) => {
     res.status(500).send('Something went wrong. Please go back and try again.').end()
@@ -111,10 +120,22 @@ app.listen(3000, () => {
 
 // === Functions === //
 
+// function for getting all songs in the database
+// this function should find the songs,
+// check the number of likes for each song,
+// return the songs from most likes to least songLikes
+function getAll() {
+  return Song.find({});
+}
+
+// function for getting all songs for each artist
+// this function should find the songs based on artist id
+
+// function for returning liked songs
+// this function should find the songs a fan has liked
+
 function addUser(req) {
-  console.log(req.user);
-  let id = req.user.id;
-  User.findOne({ 'userID': id })
+  User.findOne({ 'userID': req.user.id })
   .then((findUser) => {
     if (!findUser) {
       let newUser = new User({
