@@ -2,6 +2,11 @@
 
 // === Config === //
 
+// === install ejs === //
+// === install pretty json === //
+// === install toggle-quotes === //
+// === read clean code === //
+
 const express = require('express');
 const bodyParser = require('body-parser');
 const passport = require('passport');
@@ -90,6 +95,11 @@ app.get('/discover', (req, res) => {
   });
 });
 
+app.get('/artist', (req, res) => {
+  getAll();
+  res.end();
+});
+
 // Upload Routes
 app.post('/uploadNewSong', (req, res) => {
   let user = req.user.id;
@@ -125,14 +135,26 @@ app.listen(3000, () => {
 // check the number of likes for each song,
 // return the songs from most likes to least songLikes
 function getAll() {
-  return Song.find({});
+  Song.find({}, (err, songs) => {
+    if(err) {
+      console.log(error);
+    }
+
+    songs.map(song => {
+      console.log(song);
+    })
+  })
 }
 
 // function for getting all songs for each artist
 // this function should find the songs based on artist id
+function getAllByArtist(artistId) {
+  return Song.findById({ artistId }).populate().exec();
+}
 
 // function for returning liked songs
 // this function should find the songs a fan has liked
+function getAllByLiked() {}
 
 function addUser(req) {
   User.findOne({ 'userID': req.user.id })
