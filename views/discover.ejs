@@ -1,3 +1,31 @@
+<%# <style media="screen">
+  ul {
+    list-style-type: none;
+  }
+</style>%>
+
+<h1>Welcome to Music Discovery!</h1>
+
 <ul>
-  <li></li>
+<% for(let i = 0; i < songs.length; i++) { %>
+   <li><%= songs[i].title %></li>
+<% } %>
+</ul>
+
+<ul>
+<% for(let i = 0; i < songs.length; i++) { %>
+   <li><%= songs[i].imageID %></li>
+<% } %>
+</ul>
+
+<ul>
+<% for(let i = 0; i < songs.length; i++) { %>
+   <li><%= songs[i].audioID %></li>
+<% } %>
+</ul>
+
+<ul>
+<% for(let i = 0; i < songs.length; i++) { %>
+   <li><%= songs[i].numberOfLikes %></li>
+<% } %>
 </ul>

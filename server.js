@@ -2,11 +2,6 @@
 
 // === Config === //
 
-// === install ejs === //
-// === install pretty json === //
-// === install toggle-quotes === //
-// === read clean code === //
-
 const express = require('express');
 const bodyParser = require('body-parser');
 const passport = require('passport');
@@ -17,11 +12,11 @@ const uuidv4 = require('uuid/v4');
 
 const mongodb = require('./utils/mongodb.utils');
 
+const Song = require('./models/song.model');
+const User = require('./models/user.model');
+
 mongodb.createEventListeners();
 mongodb.connect();
-
-let Song = require('./models/song.model');
-let User = require('./models/user.model');
 
 cloudinary.config({
   cloud_name: 'mperial-web-solutions',
@@ -88,16 +83,11 @@ app.get('/profile', require('connect-ensure-login').ensureLoggedIn(), (req, res)
 app.get('/discover', (req, res) => {
   getAll()
   .then((result) => {
-    res.status(200).json(result);
+    res.render('discover', { songs: result });
   })
   .catch((error) => {
     console.log(error);
   });
-});
-
-app.get('/artist', (req, res) => {
-  getAll();
-  res.end();
 });
 
 // Upload Routes
@@ -124,6 +114,16 @@ app.post('/uploadNewSong', (req, res) => {
   });
 });
 
+app.get('/likeSong', (req, res) => {
+  addLike()
+  .then(() => {
+    res.status(200).send('Thumbs Up');
+  })
+  .catch((error) => {
+    res.status(500).send(error);
+  });
+});
+
 app.listen(3000, () => {
   console.log('Artist Portal is now running on port 3000!');
 });
@@ -135,26 +135,39 @@ app.listen(3000, () => {
 // check the number of likes for each song,
 // return the songs from most likes to least songLikes
 function getAll() {
-  Song.find({}, (err, songs) => {
-    if(err) {
-      console.log(error);
-    }
-
-    songs.map(song => {
-      console.log(song);
-    })
-  })
+  let allSongs = Song.find({});
+  return allSongs;
+  // return Song.find({}, (err, songs) => {
+  //   if(err) {
+  //     console.log(error);
+  //   }
+  //
+  //   songs.map(song => {
+  //     high2low.push(song.numberOfLikes);
+  //     // console.log(high2low);
+  //     // console.log(song.numberOfLikes);
+  //   });
+  //   console.log(high2low.sort());
+  // });
 }
 
 // function for getting all songs for each artist
 // this function should find the songs based on artist id
-function getAllByArtist(artistId) {
-  return Song.findById({ artistId }).populate().exec();
-}
+function getAllByArtist() {}
 
 // function for returning liked songs
 // this function should find the songs a fan has liked
 function getAllByLiked() {}
+
+function addLike(req) {
+  return Song.findById({ req.body.id })
+  .then((result) => {
+    result.numberOfLikes++;
+  })
+  .catch((error) => {
+    console.log(error);
+  });
+}
 
 function addUser(req) {
   User.findOne({ 'userID': req.user.id })
@@ -229,6 +242,3 @@ function uploadSong(song, cloudinarySongID) {
   });
 
 }
-
-// To access the image for display --->
-// cloudinary.image(cloudinaryImageID, { format: 'png' });
