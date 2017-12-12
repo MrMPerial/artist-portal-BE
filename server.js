@@ -9,6 +9,7 @@ const Strategy = require('passport-facebook').Strategy;
 const cloudinary = require('cloudinary');
 const fileUpload = require('express-fileupload');
 const uuidv4 = require('uuid/v4');
+const _ = require('lodash');
 
 const mongodb = require('./utils/mongodb.utils');
 
@@ -46,6 +47,7 @@ app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(fileUpload());
 
 app.use(require('morgan')('combined'));
@@ -77,7 +79,13 @@ app.get('/login/facebook/return',
 
 app.get('/profile', require('connect-ensure-login').ensureLoggedIn(), (req, res) => {
   addUser(req);
-  res.render('profile', { user: req.user });
+  getAllByArtist(req)
+  .then((result) => {
+    res.render('profile', { user: req.user, songs: result });
+  })
+  .catch((error) => {
+    console.log(error);
+  });
 });
 
 app.get('/discover', (req, res) => {
@@ -90,7 +98,6 @@ app.get('/discover', (req, res) => {
   });
 });
 
-// Upload Routes
 app.post('/uploadNewSong', (req, res) => {
   let user = req.user.id;
   let title = req.body.title;
@@ -114,10 +121,12 @@ app.post('/uploadNewSong', (req, res) => {
   });
 });
 
-app.get('/likeSong', (req, res) => {
-  addLike()
+app.post('/likeSong', (req, res) => {
+  let newLike = req.body.id;
+
+  addLike(newLike)
   .then(() => {
-    res.status(200).send('Thumbs Up');
+    res.status(200).redirect('discover');
   })
   .catch((error) => {
     res.status(500).send(error);
@@ -130,42 +139,25 @@ app.listen(3000, () => {
 
 // === Functions === //
 
-// function for getting all songs in the database
-// this function should find the songs,
-// check the number of likes for each song,
-// return the songs from most likes to least songLikes
 function getAll() {
-  let allSongs = Song.find({});
-  return allSongs;
-  // return Song.find({}, (err, songs) => {
-  //   if(err) {
-  //     console.log(error);
-  //   }
-  //
-  //   songs.map(song => {
-  //     high2low.push(song.numberOfLikes);
-  //     // console.log(high2low);
-  //     // console.log(song.numberOfLikes);
-  //   });
-  //   console.log(high2low.sort());
-  // });
+  return Song.find({})
+  .then((allSongs) => {
+    return _.sortBy(allSongs, ['numberOfLikes']).reverse();
+  })
 }
 
-// function for getting all songs for each artist
-// this function should find the songs based on artist id
-function getAllByArtist() {}
+function getAllByArtist(req) {
+  return Song.find({ "artist": req.user.id });
+}
 
 // function for returning liked songs
 // this function should find the songs a fan has liked
 function getAllByLiked() {}
 
-function addLike(req) {
-  return Song.findById({ req.body.id })
-  .then((result) => {
-    result.numberOfLikes++;
-  })
-  .catch((error) => {
-    console.log(error);
+function addLike(newLike) {
+  return Song.findOne({ "audioID": newLike }, (error, change) => {
+    change.numberOfLikes = change.numberOfLikes + 1;
+    change.save();
   });
 }
 

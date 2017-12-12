@@ -6,26 +6,15 @@
 
 <h1>Welcome to Music Discovery!</h1>
 
-<ul>
 <% for(let i = 0; i < songs.length; i++) { %>
-   <li><%= songs[i].title %></li>
+  <form action="/likeSong" method="post">
+    <ul>
+     <li><%= songs[i].title %></li>
+     <li><%= songs[i].imageID %></li>
+     <li><%= songs[i].audioID %></li>
+     <li><%= songs[i].numberOfLikes %></li>
+    </ul>
+    <input type="hidden" id="id" name="id" value=<%= songs[i].audioID %>>
+    <button type="submit">Like Song</button>
+  </form>
 <% } %>
-</ul>
-
-<ul>
-<% for(let i = 0; i < songs.length; i++) { %>
-   <li><%= songs[i].imageID %></li>
-<% } %>
-</ul>
-
-<ul>
-<% for(let i = 0; i < songs.length; i++) { %>
-   <li><%= songs[i].audioID %></li>
-<% } %>
-</ul>
-
-<ul>
-<% for(let i = 0; i < songs.length; i++) { %>
-   <li><%= songs[i].numberOfLikes %></li>
-<% } %>
-</ul>

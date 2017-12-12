@@ -43,3 +43,12 @@
   <input type="file" id="audio" name="audio">
   <button type="submit" name="button">Add New Song!</button>
 </form>
+
+<% for(let i = 0; i < songs.length; i++) { %>
+  <ul>
+   <li><%= songs[i].title %></li>
+   <li><%= songs[i].imageID %></li>
+   <li><%= songs[i].audioID %></li>
+   <li><%= songs[i].numberOfLikes %></li>
+  </ul>
+<% } %>

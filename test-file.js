@@ -25,4 +25,11 @@ function sortArray() {
   console.log(array.sort().reverse());
 }
 
+function addOne() {
+  objectOne.number + 1;
+}
+
 console.log(sortArray());
+console.log(addOne());
+
+console.log(objectOne.number);
