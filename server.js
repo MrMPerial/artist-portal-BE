@@ -249,14 +249,8 @@ function uploadSong(song, cloudinarySongID) {
 // * Signup
 // * Success
 //
-// Discover
-//
-// Should show all songs in database from most likes to least likes
-//
 // Artist Profile
 //
-// Should show all songs by that artist
-// Should contain song upload form
 // Should contain song delete option
 //
 // Fan Profile
@@ -273,6 +267,15 @@ function uploadSong(song, cloudinarySongID) {
 //
 // Should show an upload success message
 // Should contain a button to return to profile
+//
+// Discover
+//
+// Should show all songs in database from most likes to least likes
+//
+// Artist Profile
+//
+// Should show all songs by that artist
+// Should contain song upload form
 //
 // ========== TODO ==========
 //
