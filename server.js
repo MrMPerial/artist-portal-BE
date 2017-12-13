@@ -237,3 +237,43 @@ function uploadSong(song, cloudinarySongID) {
 // TODO: Validate that each fan can only like each song once.
 // TODO: Create A&R Profile with ability to see top 10 artist and the artist contact info.
 // TODO: Clean up.
+
+// ============================ //
+// Artist Profile
+//
+// Pages
+//
+// * Discover
+// * Artist Profile
+// * Fan Profile
+// * Signup
+// * Success
+//
+// Discover
+//
+// Should show all songs in database from most likes to least likes
+//
+// Artist Profile
+//
+// Should show all songs by that artist
+// Should contain song upload form
+// Should contain song delete option
+//
+// Fan Profile
+//
+// Should show all songs the fan has liked
+//
+// Signup
+//
+// Should show an option for Artist or Fan signup
+//
+// ========== Complete ==========
+//
+// Success
+//
+// Should show an upload success message
+// Should contain a button to return to profile
+//
+// ========== TODO ==========
+//
+// Load 10 songs at a time with a load more button on each page
