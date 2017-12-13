@@ -1,20 +1,98 @@
-<%# <style media="screen">
+<style media="screen">
+  body {
+    background-color: #EEEEEE;
+  }
+
+  h1 {
+    margin-top: 30px;
+    text-align: center;
+  }
+
+  form {
+    background-color: #FFFFFF;
+    border: 1px solid black;
+    border-radius: 10px;
+    float: left;
+    max-width: 500px;
+    margin: 10px;
+    padding: 20px;
+    text-transform: capitalize;
+  }
+
+  form:hover {
+    box-shadow: 0 8px 16px gray;
+  }
+
   ul {
     list-style-type: none;
+    margin: 0;
+    padding: 0;
   }
-</style>%>
+
+  li {
+    margin: 0;
+    padding: 0;
+  }
+
+  img {
+    display: inline-block;
+    margin: 0 auto;
+    max-width: 300px;
+  }
+
+  button {
+    background-color: white;
+    border: 1px solid black;
+    border-radius: 5px;
+    margin-top: 20px;
+    padding: 10px 40px;
+  }
+
+  button:hover {
+    background-color: black;
+    color: white;
+    cursor: pointer;
+  }
+
+  audio {
+    margin: 10px 0;
+    width: 100%;
+  }
+
+  footer {
+    background-color: #000000;
+    color: #FFFFFF;
+    margin-top: 30px;
+    padding: 20px;
+    text-align: center;
+  }
+
+  .likes {
+    position: absolute;
+  }
+
+  .clear {
+    clear: both;
+  }
+</style>
+
+<p><a href="/login">Login</a> <br> or <br> <a href="/profile">Go to my profile</a></p>
 
 <h1>Welcome to Music Discovery!</h1>
 
 <% for(let i = 0; i < songs.length; i++) { %>
   <form action="/likeSong" method="post">
     <ul>
-     <li><%= songs[i].title %></li>
-     <li><%= songs[i].imageID %></li>
-     <li><%= songs[i].audioID %></li>
-     <li><%= songs[i].numberOfLikes %></li>
+     <li><h2><%= songs[i].title %></h2></li>
+     <li><img src="http://res.cloudinary.com/mperial-web-solutions/image/upload/v1512008206/<%= songs[i].imageID %>.jpg"></li>
+     <li><audio controls><source src="http://res.cloudinary.com/mperial-web-solutions/video/upload/v1512602527/<%= songs[i].audioID %>.mp3" type="audio/mpeg"></audio></li>
+     <li class="likes"><%= songs[i].numberOfLikes %> Likes</li>
     </ul>
     <input type="hidden" id="id" name="id" value=<%= songs[i].audioID %>>
     <button type="submit">Like Song</button>
   </form>
 <% } %>
+
+<div class="clear"></div>
+
+<footer>Artist Portal &copy; 2017</footer>

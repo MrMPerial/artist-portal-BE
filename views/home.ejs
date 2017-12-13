@@ -1,8 +1,57 @@
-<% if (!user) { %>
-  <p>Welcome! Please <a href="/login">log in</a>.</p>
-  <% } else { %>
-    <p>Hello,
-      <%= user.displayName %>. View your <a href="/profile">profile</a>.</p>
-    <% } %>
+<style media="screen">
+body {
+  background-color: #EEEEEE;
+}
 
-<a href="/discover">Discover Music Here</a>
+.discoverBtn a {
+  background-color: black;
+  border-radius: 20px;
+  color: white;
+  font-size: 1.5em;
+  padding: 20px 60px;
+  text-decoration: none;
+}
+
+div {
+  margin-top: 25px;
+}
+
+p {
+  font-size: 1.5em;
+}
+
+span a {
+  background-color: black;
+  border-radius: 20px;
+  color: white;
+  display: inline-block;
+  margin-top: 20px;
+  padding: 20px 60px;
+  text-decoration: none;
+}
+
+.block {
+  background-color: #FFFFFF;
+  border: 1px solid black;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px gray;
+  margin: 0 auto;
+  max-width: 600px;
+  padding: 40px;
+  padding-bottom: 100px;
+  text-align: center;
+}
+</style>
+
+<div class="block">
+  <% if (!user) { %>
+    <p>Welcome! Please <a href="/login">Login</a>.</p>
+    <% } else { %>
+      <p>Hello,
+        <%= user.displayName %>. <br> <span><a href="/profile">View your profile</a></span> <br> or <br> </p>
+      <% } %>
+
+  <div class="discoverBtn">
+    <a href="/discover">Discover New Music</a>
+  </div>
+</div>

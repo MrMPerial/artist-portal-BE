@@ -11,14 +11,105 @@
     border: 1px solid gray;
     border-radius: 10px;
     box-shadow: 0 1px 4px darkgray;
+    float: none;
     margin: 0 auto;
+    margin-bottom: 50px;
     padding: 20px;
     width: 500px;
+  }
+
+  .newSongForm:hover {
+    box-shadow: 0 1px 4px darkgray;
+  }
+
+  .newSongForm input {
+    padding: 10px;
+    outline: none;
   }
 
   input {
     margin-bottom: 10px;
     width: 100%;
+  }
+
+  body {
+    background-color: #EEEEEE;
+  }
+
+  h1 {
+    margin-top: 30px;
+    text-align: center;
+  }
+
+  form {
+    background-color: #FFFFFF;
+    border: 1px solid black;
+    border-radius: 10px;
+    float: left;
+    max-width: 500px;
+    margin: 10px;
+    padding: 20px;
+    text-transform: capitalize;
+  }
+
+  form:hover {
+    box-shadow: 0 8px 16px gray;
+  }
+
+  form h2 {
+    text-align: left;
+  }
+
+  ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  li {
+    margin: 0;
+    padding: 0;
+  }
+
+  img {
+    display: inline-block;
+    margin: 0 auto;
+    max-width: 300px;
+  }
+
+  button {
+    background-color: white;
+    border: 1px solid black;
+    border-radius: 5px;
+    margin-top: 20px;
+    padding: 10px 40px;
+  }
+
+  button:hover {
+    background-color: black;
+    color: white;
+    cursor: pointer;
+  }
+
+  audio {
+    margin: 10px 0;
+    width: 100%;
+  }
+
+  footer {
+    background-color: #000000;
+    color: #FFFFFF;
+    margin-top: 30px;
+    padding: 20px;
+    text-align: center;
+  }
+
+  .likes {
+    margin-bottom: 20px;
+  }
+
+  .clear {
+    clear: both;
   }
 </style>
 
@@ -30,7 +121,7 @@
         Email:
         <%= user.emails[0].value %><br/>
           <% } %>
-  <a href="/discover">Discover Music Here</a>
+  <a href="/discover">Discover New Music</a>
 </p>
 
 <h2>Upload a new song!</h2>
@@ -44,11 +135,19 @@
   <button type="submit" name="button">Add New Song!</button>
 </form>
 
+<div class="clear"></div>
+
 <% for(let i = 0; i < songs.length; i++) { %>
-  <ul>
-   <li><%= songs[i].title %></li>
-   <li><%= songs[i].imageID %></li>
-   <li><%= songs[i].audioID %></li>
-   <li><%= songs[i].numberOfLikes %></li>
-  </ul>
+  <form action="/likeSong" method="post">
+    <ul>
+     <li><h2><%= songs[i].title %></h2></li>
+     <li><img src="http://res.cloudinary.com/mperial-web-solutions/image/upload/v1512008206/<%= songs[i].imageID %>.jpg"></li>
+     <li><audio controls><source src="http://res.cloudinary.com/mperial-web-solutions/video/upload/v1512602527/<%= songs[i].audioID %>.mp3" type="audio/mpeg"></audio></li>
+     <li class="likes"><%= songs[i].numberOfLikes %> Likes</li>
+    </ul>
+  </form>
 <% } %>
+
+<div class="clear"></div>
+
+<footer>Artist Portal &copy; 2017</footer>

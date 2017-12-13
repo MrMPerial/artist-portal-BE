@@ -196,7 +196,6 @@ function addToDB(title, cloudinaryImageID, cloudinarySongID, user) {
   });
 
   return newSong.save();
-
 }
 
 function uploadImage(image, cloudinaryImageID) {
@@ -217,7 +216,6 @@ function uploadImage(image, cloudinaryImageID) {
     }).end(image.data);
     resolve();
   });
-
 }
 
 function uploadSong(song, cloudinarySongID) {
@@ -232,5 +230,10 @@ function uploadSong(song, cloudinarySongID) {
     }).end(song.data);
     resolve();
   });
-
 }
+
+// TODO: Create Fan Profile with ability to like songs and see the liked songs on their
+// profile page.
+// TODO: Validate that each fan can only like each song once.
+// TODO: Create A&R Profile with ability to see top 10 artist and the artist contact info.
+// TODO: Clean up.
