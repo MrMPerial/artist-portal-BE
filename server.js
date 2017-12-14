@@ -74,18 +74,44 @@ app.get('/login/facebook',
 
 app.get('/login/facebook/return',
   passport.authenticate('facebook', { failureRedirect: '/login' }), (req, res) => {
-  res.redirect('/');
+    User.findOne({ 'userID': req.user.id })
+    .then((findUser) => {
+      if (!findUser) {
+        res.render('profile-select');
+      } else {
+        res.redirect('/');
+      }
+    })
+    .catch((error) => {
+      console.log(error);
+    });
 });
 
 app.get('/profile', require('connect-ensure-login').ensureLoggedIn(), (req, res) => {
-  addUser(req);
-  getAllByArtist(req)
-  .then((result) => {
-    res.render('profile', { user: req.user, songs: result });
+  let proType = req.query.userType;
+
+  addUser(req, proType);
+
+  User.findOne({ 'userID': req.user.id }, (error, user) => {
+    if (user.profileType == 'fan') {
+      getAllByLiked(req)
+      .then((result) => {
+        let songs = _.flatten(result);
+        res.render('fanProfile', { user: req.user, songs: songs });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    } else if (user.profileType == 'artist') {
+      getAllByArtist(req)
+      .then((result) => {
+        res.render('artistProfile', { user: req.user, songs: result });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    }
   })
-  .catch((error) => {
-    console.log(error);
-  });
 });
 
 app.get('/discover', (req, res) => {
@@ -124,7 +150,8 @@ app.post('/uploadNewSong', (req, res) => {
 app.post('/likeSong', (req, res) => {
   let newLike = req.body.id;
 
-  addLike(newLike)
+  addLikeToProfile(req, newLike);
+  addLike(req, newLike)
   .then(() => {
     res.status(200).redirect('discover');
   })
@@ -152,23 +179,55 @@ function getAllByArtist(req) {
 
 // function for returning liked songs
 // this function should find the songs a fan has liked
-function getAllByLiked() {}
-
-function addLike(newLike) {
-  return Song.findOne({ "audioID": newLike }, (error, change) => {
-    change.numberOfLikes = change.numberOfLikes + 1;
-    change.save();
+function getAllByLiked(req) {
+  let songList = [];
+  return User.findOne({ "userID": req.user.id }, )
+  .then((result) => {
+    for ( let i = 0; i < result.songLikes.length; i++ ) {
+      songList.push(Song.find({ "audioID": result.songLikes[i] }));
+    }
+    return Promise.all(songList);
+  })
+  .catch((error) => {
+    console.log(error);
   });
 }
 
-function addUser(req) {
+function addLikeToProfile(req, newLike) {
+  return User.findOne({ "userID": req.user.id }, (error, change) => {
+    for ( let i = 0; i < change.songLikes.length; i++ ) {
+      if (change.songLikes[i] == newLike) {
+        return;
+      }
+    }
+    change.songLikes.push(newLike);
+    change.save();
+  })
+}
+
+function addLike(req, newLike) {
+  return User.findOne({ "userID": req.user.id }, (error, user) => {
+    for ( let i = 0; i < user.songLikes.length; i++ ) {
+      if (user.songLikes[i] == newLike) {
+        return;
+      }
+    }
+    return Song.findOne({ "audioID": newLike }, (error, change) => {
+      change.numberOfLikes = change.numberOfLikes + 1;
+      change.save();
+    });
+  })
+}
+
+function addUser(req, type) {
   User.findOne({ 'userID': req.user.id })
   .then((findUser) => {
     if (!findUser) {
       let newUser = new User({
         userID: req.user.id,
         userName: req.user.displayName,
-        songLikes: []
+        songLikes: [],
+        profileType: type
       });
 
       return newUser.save();
@@ -232,51 +291,6 @@ function uploadSong(song, cloudinarySongID) {
   });
 }
 
-// TODO: Create Fan Profile with ability to like songs and see the liked songs on their
-// profile page.
-// TODO: Validate that each fan can only like each song once.
+// TODO: Create option to delete songs and profiles.
 // TODO: Create A&R Profile with ability to see top 10 artist and the artist contact info.
 // TODO: Clean up.
-
-// ============================ //
-// Artist Profile
-//
-// Pages
-//
-// * Discover
-// * Artist Profile
-// * Fan Profile
-// * Signup
-// * Success
-//
-// Artist Profile
-//
-// Should contain song delete option
-//
-// Fan Profile
-//
-// Should show all songs the fan has liked
-//
-// Signup
-//
-// Should show an option for Artist or Fan signup
-//
-// ========== Complete ==========
-//
-// Success
-//
-// Should show an upload success message
-// Should contain a button to return to profile
-//
-// Discover
-//
-// Should show all songs in database from most likes to least likes
-//
-// Artist Profile
-//
-// Should show all songs by that artist
-// Should contain song upload form
-//
-// ========== TODO ==========
-//
-// Load 10 songs at a time with a load more button on each page
