@@ -90,27 +90,28 @@ app.get('/login/facebook/return',
 app.get('/profile', require('connect-ensure-login').ensureLoggedIn(), (req, res) => {
   let proType = req.query.userType;
 
-  addUser(req, proType);
-
-  User.findOne({ 'userID': req.user.id }, (error, user) => {
-    if (user.profileType == 'fan') {
-      getAllByLiked(req)
-      .then((result) => {
-        let songs = _.flatten(result);
-        res.render('fanProfile', { user: req.user, songs: songs });
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-    } else if (user.profileType == 'artist') {
-      getAllByArtist(req)
-      .then((result) => {
-        res.render('artistProfile', { user: req.user, songs: result });
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-    }
+  addUser(req, proType)
+  .then(() => {
+    User.findOne({ 'userID': req.user.id }, (error, user) => {
+      if (user.profileType == 'fan') {
+        getAllByLiked(req)
+        .then((result) => {
+          let songs = _.flatten(result);
+          res.render('fanProfile', { user: req.user, songs: songs });
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+      } else if (user.profileType == 'artist') {
+        getAllByArtist(req)
+        .then((result) => {
+          res.render('artistProfile', { user: req.user, songs: result });
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+      }
+    })
   })
 });
 
@@ -177,11 +178,9 @@ function getAllByArtist(req) {
   return Song.find({ "artist": req.user.id });
 }
 
-// function for returning liked songs
-// this function should find the songs a fan has liked
 function getAllByLiked(req) {
   let songList = [];
-  return User.findOne({ "userID": req.user.id }, )
+  return User.findOne({ "userID": req.user.id })
   .then((result) => {
     for ( let i = 0; i < result.songLikes.length; i++ ) {
       songList.push(Song.find({ "audioID": result.songLikes[i] }));
@@ -220,7 +219,7 @@ function addLike(req, newLike) {
 }
 
 function addUser(req, type) {
-  User.findOne({ 'userID': req.user.id })
+  return User.findOne({ 'userID': req.user.id })
   .then((findUser) => {
     if (!findUser) {
       let newUser = new User({

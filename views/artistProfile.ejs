@@ -138,12 +138,14 @@
 <div class="clear"></div>
 
 <% for(let i = 0; i < songs.length; i++) { %>
-  <ul>
-   <li><h2><%= songs[i].title %></h2></li>
-   <li><img src="http://res.cloudinary.com/mperial-web-solutions/image/upload/v1512008206/<%= songs[i].imageID %>.jpg"></li>
-   <li><audio controls><source src="http://res.cloudinary.com/mperial-web-solutions/video/upload/v1512602527/<%= songs[i].audioID %>.mp3" type="audio/mpeg"></audio></li>
-   <li class="likes"><%= songs[i].numberOfLikes %> Likes</li>
-  </ul>
+  <form>
+    <ul>
+     <li><h2><%= songs[i].title %></h2></li>
+     <li><img src="http://res.cloudinary.com/mperial-web-solutions/image/upload/v1512008206/<%= songs[i].imageID %>.jpg"></li>
+     <li><audio controls><source src="http://res.cloudinary.com/mperial-web-solutions/video/upload/v1512602527/<%= songs[i].audioID %>.mp3" type="audio/mpeg"></audio></li>
+     <li class="likes"><%= songs[i].numberOfLikes %> Likes</li>
+    </ul>
+  </form>
 <% } %>
 
 <div class="clear"></div>
