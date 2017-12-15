@@ -1,6 +1,6 @@
 # Artist Portal
 
-## A non political, organic music showcase for aspiring artist.
+## A non political, organically measured music showcase for aspiring artist.
 
 ### Purpose:
 The purpose of the project is to allow artist to upload their music and showcase it.
@@ -19,3 +19,33 @@ Signup with Facebook. Upload your songs with an MP3, a cover image and the title
 * Fans:
 
 Signup with Facebook. Listen to new music and show your love for a song by clicking the like button. You can only like a song one time. Every song that you like will show up in your dashboard for your convenience.
+
+## Technical Stuff
+
+### Basics
+- Back End is built on Node with Express
+- Front End is Currently being delivered with EJS but will be converted to Angular
+- Database is Mongo
+
+### Packages
+- body-parser
+- cloudinary
+- connect-ensure-login
+- cookie-parser
+- ejs
+- express
+- express-fileupload
+- express-method-override
+- express-session
+- lodash
+- mongoose
+- morgan
+- passport
+- passport-facebook
+- uuid
+
+### Contributions
+Contributions are welcome.
+
+### Suggestions
+Suggestions are welcome.
