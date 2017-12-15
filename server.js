@@ -2,6 +2,7 @@
 
 // === Config === //
 
+// Third party libraries
 const express = require('express');
 const bodyParser = require('body-parser');
 const passport = require('passport');
@@ -11,20 +12,25 @@ const fileUpload = require('express-fileupload');
 const uuidv4 = require('uuid/v4');
 const _ = require('lodash');
 
+// Database Configuration
 const mongodb = require('./utils/mongodb.utils');
 
+// Mongoose Schemas
 const Song = require('./models/song.model');
 const User = require('./models/user.model');
 
+// Database connectivity
 mongodb.createEventListeners();
 mongodb.connect();
 
+// Third party server configuration
 cloudinary.config({
   cloud_name: 'mperial-web-solutions',
   api_key: '938561814326735',
   api_secret: 'QPUJetWRNBfDEjfIcZUnXCft6vM'
 });
 
+// Facebook Login Integration
 passport.use(new Strategy({
   clientID: '1183972921705936',
   clientSecret: 'f8376e4fd45dacf715336a37a8acad89',
@@ -33,27 +39,36 @@ passport.use(new Strategy({
   return cb(null, profile);
 }));
 
+// Serialize user for login caching
 passport.serializeUser( (user, cb) => {
   cb(null, user);
 });
 
+// Deserialize user after logout
 passport.deserializeUser( (obj, cb) => {
   cb(null, obj);
 });
 
+// Express Framework
 const app = express();
 
+// Front End placeholder using EJS
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 
+// Data parsing
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
+// Needed to upload files from a form
 app.use(fileUpload());
 
+// Needed for user login sessions
 app.use(require('morgan')('combined'));
 app.use(require('cookie-parser')());
 app.use(require('express-session')({ secret: 'ap secret', resave: true, saveUninitialized: true }));
 
+// Needed for user login sessions
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -72,6 +87,10 @@ app.get('/login/facebook',
   passport.authenticate('facebook')
 );
 
+// After authenticating a user with Facebook,
+// check to see if the user already exists in the database.
+// If user does not exist, send the user to a profile prompt to determine type of user.
+// If user exists, send the user to the profile page.
 app.get('/login/facebook/return',
   passport.authenticate('facebook', { failureRedirect: '/login' }), (req, res) => {
     User.findOne({ 'userID': req.user.id })
@@ -87,6 +106,11 @@ app.get('/login/facebook/return',
     });
 });
 
+// When directed to the profile, check if user exists.
+// If user does not exist, add them to the database.
+// If user exists, check user type.
+// If user has type "fan", direct the user to fanProfile page.
+// If user has type "artist", direct user to artistProfile page.
 app.get('/profile', require('connect-ensure-login').ensureLoggedIn(), (req, res) => {
   let proType = req.query.userType;
 
@@ -115,6 +139,7 @@ app.get('/profile', require('connect-ensure-login').ensureLoggedIn(), (req, res)
   })
 });
 
+// Search the database and return all existing songs.
 app.get('/discover', (req, res) => {
   getAll()
   .then((result) => {
@@ -125,6 +150,10 @@ app.get('/discover', (req, res) => {
   });
 });
 
+// Upload audio file to server.
+// Upload image file to server.
+// Add data to database.
+// Direct User to success page.
 app.post('/uploadNewSong', (req, res) => {
   let user = req.user.id;
   let title = req.body.title;
@@ -148,6 +177,10 @@ app.post('/uploadNewSong', (req, res) => {
   });
 });
 
+// Check to see if song is already liked by fan.
+// If song is not liked by fan add audio ID to fan song list.
+// If song is not liked by fan increase number of likes by 1 for that song.
+// If song is already liked by fan, do nothing.
 app.post('/likeSong', (req, res) => {
   let newLike = req.body.id;
 
@@ -161,6 +194,7 @@ app.post('/likeSong', (req, res) => {
   });
 });
 
+// Create server on port.
 app.listen(3000, () => {
   console.log('Artist Portal is now running on port 3000!');
 });
@@ -293,3 +327,4 @@ function uploadSong(song, cloudinarySongID) {
 // TODO: Create option to delete songs and profiles.
 // TODO: Create A&R Profile with ability to see top 10 artist and the artist contact info.
 // TODO: Clean up.
+// TODO: Separate files into cleaner structure
