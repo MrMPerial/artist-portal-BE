@@ -88,8 +88,12 @@
      <li><audio controls><source src="http://res.cloudinary.com/mperial-web-solutions/video/upload/v1512602527/<%= songs[i].audioID %>.mp3" type="audio/mpeg"></audio></li>
      <li class="likes"><%= songs[i].numberOfLikes %> Likes</li>
     </ul>
+    <% if (!user) { %>
+      <p>Please login to like songs</p>
+      <% } else { %>
     <input type="hidden" id="id" name="id" value=<%= songs[i].audioID %>>
     <button type="submit">Like Song</button>
+    <% } %>
   </form>
 <% } %>
 

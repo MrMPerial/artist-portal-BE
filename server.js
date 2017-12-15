@@ -141,9 +141,11 @@ app.get('/profile', require('connect-ensure-login').ensureLoggedIn(), (req, res)
 
 // Search the database and return all existing songs.
 app.get('/discover', (req, res) => {
+  let user = req.user;
+
   getAll()
   .then((result) => {
-    res.render('discover', { songs: result });
+    res.render('discover', { songs: result, user: user });
   })
   .catch((error) => {
     res.status(500).send('Something went wrong, please go back and try again.');
@@ -340,5 +342,4 @@ function uploadSong(song, cloudinarySongID) {
 // TODO: Create A&R Profile with ability to see top 10 artist and the artist contact info.
 // TODO: Clean up.
 // TODO: Separate files into cleaner structure.
-// TODO: Validate user login when like button clicked.
 // TODO: Create error pages.
