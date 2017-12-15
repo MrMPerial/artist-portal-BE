@@ -201,6 +201,7 @@ app.listen(3000, () => {
 
 // === Functions === //
 
+// Search and return all songs in the database in order of highest to lowest likes.
 function getAll() {
   return Song.find({})
   .then((allSongs) => {
@@ -208,10 +209,12 @@ function getAll() {
   })
 }
 
+// Search and return all songs uploaded by artist.
 function getAllByArtist(req) {
   return Song.find({ "artist": req.user.id });
 }
 
+// Search and return list of songs liked by user.
 function getAllByLiked(req) {
   let songList = [];
   return User.findOne({ "userID": req.user.id })
@@ -226,6 +229,8 @@ function getAllByLiked(req) {
   });
 }
 
+// Check if song has been liked by user.
+// If new user like, add song to user list.
 function addLikeToProfile(req, newLike) {
   return User.findOne({ "userID": req.user.id }, (error, change) => {
     for ( let i = 0; i < change.songLikes.length; i++ ) {
@@ -238,6 +243,8 @@ function addLikeToProfile(req, newLike) {
   })
 }
 
+// Check if song has been liked by user.
+// If new user like, increase number of likes by 1.
 function addLike(req, newLike) {
   return User.findOne({ "userID": req.user.id }, (error, user) => {
     for ( let i = 0; i < user.songLikes.length; i++ ) {
@@ -252,6 +259,8 @@ function addLike(req, newLike) {
   })
 }
 
+// Check if user exists.
+// If new user add user to database.
 function addUser(req, type) {
   return User.findOne({ 'userID': req.user.id })
   .then((findUser) => {
@@ -271,6 +280,7 @@ function addUser(req, type) {
   });
 }
 
+// Add data to database.
 function addToDB(title, cloudinaryImageID, cloudinarySongID, user) {
   let userID = user;
   let songID = title;
@@ -290,6 +300,7 @@ function addToDB(title, cloudinaryImageID, cloudinarySongID, user) {
   return newSong.save();
 }
 
+// Upload image to server.
 function uploadImage(image, cloudinaryImageID) {
   return new Promise((resolve, reject) => {
     cloudinary.v2.uploader.upload_stream(
@@ -310,6 +321,7 @@ function uploadImage(image, cloudinaryImageID) {
   });
 }
 
+// Upload song file to server.
 function uploadSong(song, cloudinarySongID) {
   return new Promise((resolve, reject) => {
     cloudinary.v2.uploader.upload_stream(
@@ -327,4 +339,5 @@ function uploadSong(song, cloudinarySongID) {
 // TODO: Create option to delete songs and profiles.
 // TODO: Create A&R Profile with ability to see top 10 artist and the artist contact info.
 // TODO: Clean up.
-// TODO: Separate files into cleaner structure
+// TODO: Separate files into cleaner structure.
+// TODO: Validate user login when like button clicked.
