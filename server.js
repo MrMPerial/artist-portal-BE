@@ -102,7 +102,7 @@ app.get('/login/facebook/return',
       }
     })
     .catch((error) => {
-      console.log(error);
+      res.status(500).send('Something went wrong, please go back and try again.');
     });
 });
 
@@ -124,7 +124,7 @@ app.get('/profile', require('connect-ensure-login').ensureLoggedIn(), (req, res)
           res.render('fanProfile', { user: req.user, songs: songs });
         })
         .catch((error) => {
-          console.log(error);
+          res.status(500).send('Something went wrong, please go back and try again.');
         });
       } else if (user.profileType == 'artist') {
         getAllByArtist(req)
@@ -132,7 +132,7 @@ app.get('/profile', require('connect-ensure-login').ensureLoggedIn(), (req, res)
           res.render('artistProfile', { user: req.user, songs: result });
         })
         .catch((error) => {
-          console.log(error);
+          res.status(500).send('Something went wrong, please go back and try again.');
         });
       }
     })
@@ -146,7 +146,7 @@ app.get('/discover', (req, res) => {
     res.render('discover', { songs: result });
   })
   .catch((error) => {
-    console.log(error);
+    res.status(500).send('Something went wrong, please go back and try again.');
   });
 });
 
@@ -173,7 +173,7 @@ app.post('/uploadNewSong', (req, res) => {
     res.status(200).render('success');
   })
   .catch((error) => {
-    res.status(500).send('Something went wrong. Please go back and try again.').end()
+    res.status(500).send('Something went wrong, please go back and try again.').end()
   });
 });
 
@@ -190,7 +190,7 @@ app.post('/likeSong', (req, res) => {
     res.status(200).redirect('discover');
   })
   .catch((error) => {
-    res.status(500).send(error);
+    res.status(500).send('Something went wrong, please go back and try again.');
   });
 });
 
@@ -341,3 +341,4 @@ function uploadSong(song, cloudinarySongID) {
 // TODO: Clean up.
 // TODO: Separate files into cleaner structure.
 // TODO: Validate user login when like button clicked.
+// TODO: Create error pages.
