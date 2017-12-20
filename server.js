@@ -34,7 +34,7 @@ cloudinary.config({
 passport.use(new Strategy({
   clientID: '1183972921705936',
   clientSecret: 'f8376e4fd45dacf715336a37a8acad89',
-  callbackURL: 'http://localhost:3000/login/facebook/return'
+  callbackURL: 'https://artist-portal-184123.appspot.com/login/facebook/return'
 }, (accessToken, refreshToken, profile, cb) => {
   return cb(null, profile);
 }));
