@@ -197,7 +197,7 @@ app.post('/likeSong', (req, res) => {
 });
 
 // Create server on port.
-app.listen(3000, () => {
+app.listen(8080, () => {
   console.log('Artist Portal is now running on port 3000!');
 });
 
