@@ -343,3 +343,4 @@ function uploadSong(song, cloudinarySongID) {
 // TODO: Clean up.
 // TODO: Separate files into cleaner structure.
 // TODO: Create error pages.
+// TODO: Create a logging system.
