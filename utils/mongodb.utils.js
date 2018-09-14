@@ -9,7 +9,7 @@ module.exports = {
 };
 
 function connect() {
-  const uri = 'mongodb://mrmperial:artistportalproject@ds229435.mlab.com:29435/artist-portal';
+  const uri = 'uri-value';
   mongoose.connect(uri, { useMongoClient: true });
 }
 
