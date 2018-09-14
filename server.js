@@ -26,15 +26,15 @@ mongodb.connect();
 // Third party server configuration
 cloudinary.config({
   cloud_name: 'mperial-web-solutions',
-  api_key: '938561814326735',
-  api_secret: 'QPUJetWRNBfDEjfIcZUnXCft6vM'
+  api_key: 'key-value',
+  api_secret: 'secret-value'
 });
 
 // Facebook Login Integration
 passport.use(new Strategy({
-  clientID: '1183972921705936',
-  clientSecret: 'f8376e4fd45dacf715336a37a8acad89',
-  callbackURL: 'https://artist-portal-184123.appspot.com/login/facebook/return'
+  clientID: 'id-value',
+  clientSecret: 'secret-value',
+  callbackURL: 'url-value'
 }, (accessToken, refreshToken, profile, cb) => {
   return cb(null, profile);
 }));
